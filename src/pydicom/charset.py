@@ -17,8 +17,12 @@ if TYPE_CHECKING:  # pragma: no cover
     from pydicom.dataelem import DataElement
 
 
-# default encoding if no encoding defined - corresponds to ISO IR 6 / ASCII
-default_encoding = "iso8859"
+# # default encoding if no encoding defined - corresponds to ISO IR 6 / ASCII
+# # default_encoding = "iso8859"
+import os
+ASCII_ENCODING = "iso8859"
+default_encoding = os.environ["PYDICOM_DEFAULT_ENCODING"] \
+    if "PYDICOM_DEFAULT_ENCODING" in os.environ else ASCII_ENCODING
 
 # Map DICOM Specific Character Set to python equivalent
 # https://docs.python.org/3/library/codecs.html#standard-encodings
@@ -26,7 +30,7 @@ python_encoding = {
     # default character set for DICOM
     "": default_encoding,
     # alias for latin_1 too (iso_ir_6 exists as an alias to 'ascii')
-    "ISO_IR 6": default_encoding,
+    "ISO_IR 6": ASCII_ENCODING,
     "ISO_IR 13": "shift_jis",
     "ISO_IR 100": "latin_1",
     "ISO_IR 101": "iso8859_2",
@@ -38,7 +42,7 @@ python_encoding = {
     "ISO_IR 144": "iso_ir_144",  # Russian
     "ISO_IR 148": "iso_ir_148",  # Turkish
     "ISO_IR 166": "iso_ir_166",  # Thai
-    "ISO 2022 IR 6": "iso8859",  # alias for latin_1 too
+    "ISO 2022 IR 6": ASCII_ENCODING,  # alias for latin_1 too
     "ISO 2022 IR 13": "shift_jis",
     "ISO 2022 IR 87": "iso2022_jp",
     "ISO 2022 IR 100": "latin_1",
@@ -72,7 +76,7 @@ ESC = b"\x1b"
 # Map Python encodings to escape sequences as defined in PS3.3 in tables
 # C.12-3 (single-byte) and C.12-4 (multi-byte character sets).
 CODES_TO_ENCODINGS = {
-    ESC + b"(B": default_encoding,  # used to switch to ASCII G0 code element
+    ESC + b"(B": ASCII_ENCODING,  # used to switch to ASCII G0 code element
     ESC + b"-A": "latin_1",
     ESC + b")I": "shift_jis",  # switches to ISO-IR 13
     ESC + b"(J": "shift_jis",  # switches to ISO-IR 14 (shift_jis handles both)

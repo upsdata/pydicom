@@ -39,7 +39,7 @@ from pydicom.values import convert_value
 
 
 badvr_name = get_testdata_file("badVR.dcm")
-default_encoding = "iso8859"
+# default_encoding = "iso8859"
 
 
 @pytest.fixture(params=(True, False))
